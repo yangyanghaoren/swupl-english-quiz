@@ -384,4 +384,5 @@
   renderExamList();
   renderExam();
   updateTimer();
+  window.__quizReady = true;
 })();

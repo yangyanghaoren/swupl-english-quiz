@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="西南政法大学考博英语历年真题在线测试，保留原题型，支持自动保存与客观题评分。">
   <title>西政考博英语 · 历年真题在线测试</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20261028-cachefix1">
 </head>
 <body>
   <div class="app-shell">
@@ -22,6 +22,7 @@
         <div><strong>231</strong><span>页源资料</span></div>
         <div><strong>0</strong><span>条广告</span></div>
       </div>
+      <span id="fullCount" hidden></span>
       <label class="search-box">
         <span class="sr-only">筛选年份</span>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.3-4.3m2.3-5.2a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z"/></svg>
@@ -123,7 +124,19 @@
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <div id="mobileBackdrop" class="mobile-backdrop"></div>
 
-  <script src="data/exams.js"></script>
-  <script src="app.js"></script>
+  <script>
+    window.__quizReady = false;
+    window.__showQuizLoadError = function () {
+      if (window.__quizReady) return;
+      var title = document.getElementById("examTitle");
+      var meta = document.getElementById("examMeta");
+      if (title) title.textContent = "题库载入失败";
+      if (meta) meta.innerHTML = '<button class="retry-button" type="button" onclick="location.reload()">重新加载</button><span>请检查网络后重试</span>';
+    };
+    window.addEventListener("error", function () { setTimeout(window.__showQuizLoadError, 0); });
+    setTimeout(window.__showQuizLoadError, 8000);
+  </script>
+  <script src="data/exams.js?v=20261028-cachefix1" onerror="window.__showQuizLoadError()"></script>
+  <script src="app.js?v=20261028-cachefix1" onerror="window.__showQuizLoadError()"></script>
 </body>
 </html>

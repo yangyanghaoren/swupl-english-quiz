@@ -75,6 +75,8 @@ svg { width: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-l
 .heading-row { display: flex; align-items: center; gap: 10px; }
 .exam-heading h2 { margin: 0; overflow: hidden; font: 700 21px/1.3 Georgia, "STSong", serif; text-overflow: ellipsis; white-space: nowrap; }
 .exam-heading p { margin: 5px 0 0; color: #69778a; font-size: 12px; }
+.exam-heading p:has(.retry-button) { display: flex; align-items: center; gap: 9px; }
+.retry-button { padding: 5px 10px; border: 1px solid #b8cce0; border-radius: 6px; cursor: pointer; color: #173e6d; background: #edf4fb; font-size: 11px; font-weight: 700; }
 .badge { flex: none; padding: 4px 7px; border: 1px solid #c7d7e7; border-radius: 5px; color: #345574; background: #edf4fb; font-size: 10px; font-weight: 700; }
 .badge.memory { border-color: #ead4a7; color: #88621f; background: #fff8e9; }
 .top-actions { display: flex; align-items: center; gap: 10px; }
