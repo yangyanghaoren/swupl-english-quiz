@@ -18,9 +18,9 @@
         </div>
       </div>
       <div class="library-summary">
-        <div><strong id="examCount">—</strong><span>套资料</span></div>
-        <div><strong id="fullCount">—</strong><span>套完整卷</span></div>
-        <div><strong>本地</strong><span>自动保存</span></div>
+        <div><strong id="examCount">—</strong><span>套真题</span></div>
+        <div><strong>231</strong><span>页源资料</span></div>
+        <div><strong>0</strong><span>条广告</span></div>
       </div>
       <label class="search-box">
         <span class="sr-only">筛选年份</span>
@@ -28,6 +28,10 @@
         <input id="yearSearch" type="search" placeholder="筛选年份…" autocomplete="off">
       </label>
       <nav id="examList" class="exam-list"></nav>
+      <div class="sidebar-contact">
+        <span>备考交流微信</span>
+        <strong>549624126</strong>
+      </div>
       <button id="aboutButton" class="sidebar-note" type="button">
         <span>资料说明</span>
         <small>覆盖范围、评分与去重</small>
@@ -78,7 +82,7 @@
                 <span>答案自动保存</span>
               </div>
             </div>
-            <pre id="paperText" class="paper-text"></pre>
+            <div id="paperText" class="paper-text paper-content"></div>
           </div>
         </article>
 
@@ -109,12 +113,12 @@
     <p class="eyebrow">ABOUT THIS LIBRARY</p>
     <h2>资料与评分说明</h2>
     <div class="dialog-grid">
-      <section><strong>14</strong><h3>套完整题面</h3><p>2000–2017 汇编中可完整提取的年份，保留原题面顺序。</p></section>
-      <section><strong>3</strong><h3>套回忆版</h3><p>2019、2022、2024 仅按原资料呈现，不补写缺失题干。</p></section>
-      <section><strong>10</strong><h3>组重复已清理</h3><p>按 SHA-256 校验，只移除了逐字节相同的“(1)”副本。</p></section>
+      <section><strong>14</strong><h3>套历年真题</h3><p>全部来自你指定的 2000–2017 解析 PDF，保留原题型顺序。</p></section>
+      <section><strong>231</strong><h3>页源文件</h3><p>按年份切分为独立套卷，题干和选项重新排版。</p></section>
+      <section><strong>0</strong><h3>条商业广告</h3><p>源文件中的网站、咨询 QQ 和电话水印均已清除。</p></section>
     </div>
     <p id="sourceNotice" class="source-notice"></p>
-    <p class="dialog-footnote">本工具用于个人备考练习。主观题不会自动评分；没有答案的年份仍可作答和保存。</p>
+    <p class="dialog-footnote">备考交流微信：<strong>549624126</strong>。主观题不会自动评分；没有答案的年份仍可作答和保存。</p>
   </dialog>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <div id="mobileBackdrop" class="mobile-backdrop"></div>

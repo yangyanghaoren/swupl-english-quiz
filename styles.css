@@ -64,6 +64,10 @@ svg { width: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-l
 .sidebar-note { margin-top: 12px; padding: 12px 14px; border: 1px solid rgba(255,255,255,.1); border-radius: 10px; cursor: pointer; color: #c8d3df; text-align: left; background: rgba(255,255,255,.04); }
 .sidebar-note span, .sidebar-note small { display: block; }
 .sidebar-note small { margin-top: 2px; color: #7f94aa; }
+.sidebar-contact { margin-top: 12px; padding: 12px 14px; border: 1px solid rgba(201,154,69,.28); border-radius: 10px; background: rgba(201,154,69,.08); }
+.sidebar-contact span, .sidebar-contact strong { display: block; }
+.sidebar-contact span { color: #9fb0c2; font-size: 10px; }
+.sidebar-contact strong { margin-top: 4px; color: #f0c979; font: 700 17px Georgia, serif; letter-spacing: .06em; }
 
 .main-stage { min-width: 0; }
 .topbar { position: sticky; top: 0; z-index: 15; min-height: 82px; display: flex; align-items: center; gap: 18px; padding: 15px 26px; border-bottom: 1px solid #d8dee5; background: rgba(248,250,252,.94); backdrop-filter: blur(15px); }
@@ -96,8 +100,22 @@ svg { width: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-l
 .paper-masthead h3 { margin: 0; font: 700 clamp(22px, 3vw, 30px)/1.4 "STSong", SimSun, Georgia, serif; }
 .rule { width: 54px; height: 2px; margin: 18px auto; background: var(--gold); }
 .paper-facts { display: flex; justify-content: center; gap: 20px; color: #7c776e; font-size: 11px; }
-.paper-text { margin: 0; color: #242b34; font: 15px/1.86 "Noto Serif SC", "STSong", SimSun, serif; white-space: pre-wrap; overflow-wrap: anywhere; tab-size: 2; }
+.paper-text { margin: 0; color: #242b34; font: 15px/1.86 "Noto Serif SC", "STSong", SimSun, serif; overflow-wrap: anywhere; }
 .paper-text.large { font-size: 17px; }
+.paper-content { display: flow-root; }
+.paper-paragraph { margin: 0 0 1.3em; text-align: justify; }
+.paper-doc-title { margin: 2.8em 0 1.7em; padding-bottom: .8em; border-bottom: 1px solid #ddd5c6; color: var(--navy); font: 700 20px/1.55 "STSong", SimSun, serif; text-align: center; }
+.paper-section-heading { margin: 3.2em 0 1.35em; padding: .8em 1em; border-left: 4px solid var(--gold); color: #17385e; background: linear-gradient(90deg, #f3eee3, rgba(243,238,227,0)); font: 700 17px/1.5 Georgia, "STSong", serif; }
+.paper-passage-label { margin: 2.1em 0 1em; color: #4d5d70; font-weight: 700; letter-spacing: .01em; }
+.paper-question { margin: 1.65em 0; padding: 1.25em 1.3em 1.35em; border: 1px solid #e4ded2; border-radius: 10px; background: #fffdf8; box-shadow: 0 6px 18px rgba(37,45,57,.045); }
+.question-stem { display: grid; grid-template-columns: 31px minmax(0,1fr); gap: .8em; align-items: start; }
+.question-stem p { margin: .05em 0 0; color: #172132; font-weight: 650; line-height: 1.8; }
+.question-number { display: grid; width: 31px; height: 31px; place-items: center; border-radius: 8px; color: white; background: var(--navy); font: 700 13px Georgia, serif; }
+.question-number:empty { visibility: hidden; }
+.paper-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7em .85em; margin: 1.05em 0 0 43px; }
+.paper-option { display: grid; grid-template-columns: 25px minmax(0,1fr); gap: .65em; align-items: start; padding: .7em .8em; border: 1px solid #e4e7ea; border-radius: 8px; background: white; }
+.paper-option > span { display: grid; width: 24px; height: 24px; place-items: center; border-radius: 6px; color: #294c73; background: #eaf0f6; font: 700 11px Georgia, serif; }
+.paper-option p { margin: 0; line-height: 1.65; }
 
 .answer-panel { position: sticky; top: 100px; max-height: calc(100vh - 118px); display: flex; flex-direction: column; overflow: hidden; border: 1px solid #d4dbe2; border-radius: 12px; background: white; box-shadow: 0 12px 34px rgba(18,40,66,.1); }
 .answer-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 20px 12px; }
@@ -177,6 +195,8 @@ svg { width: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-l
   .paper-masthead { margin-bottom: 28px; }
   .paper-facts { gap: 9px; }
   .paper-text { font-size: 14px; line-height: 1.76; }
+  .paper-question { padding: 1em; }
+  .paper-options { grid-template-columns: 1fr; margin-left: 0; }
   .answer-panel { position: static; max-height: none; display: none; }
   body.mobile-answer .paper-panel { display: none; }
   body.mobile-answer .answer-panel { display: flex; }

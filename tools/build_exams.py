@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 from pathlib import Path
 
@@ -9,7 +10,12 @@ from pypdf import PdfReader
 
 ROOT = Path(__file__).resolve().parents[2]
 SITE = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "2000-2017西南政法大学考博英语试题及解析.pdf"
+SOURCE = Path(
+    os.environ.get(
+        "SWUPL_SOURCE_PDF",
+        ROOT / "版本二" / "西南政法大学考博英语2000-2017+解析.pdf",
+    )
+)
 
 
 def compact_page(text: str, page_number: int) -> str:
@@ -20,9 +26,9 @@ def compact_page(text: str, page_number: int) -> str:
             if kept and kept[-1] != "":
                 kept.append("")
             continue
-        if "www.boshitest.com" in line:
+        if "www.boshitest.com" in line.lower():
             continue
-        if line.startswith("咨询 QQ：") or line.startswith("咨询QQ："):
+        if re.match(r"^咨询\s*QQ\s*[：:]", line, re.I):
             continue
         if re.fullmatch(rf"{page_number}", line):
             continue
@@ -216,7 +222,7 @@ def main() -> None:
                 "year": year,
                 "title": f"{year} 年博士研究生入学考试英语试题",
                 "kind": "full",
-                "source": "2000–2017 历年试题及解析汇编",
+                "source": "西南政法大学考博英语 2000–2017 + 解析",
                 "sourcePages": f"{start}–{end}",
                 "score": total_score(sections),
                 "sections": sections,
@@ -224,56 +230,10 @@ def main() -> None:
             }
         )
 
-    memories = [
-        (
-            2024,
-            ROOT / "西南政法大学考博英语2024年.pdf",
-            [
-                choice("cloze", "一、完形填空", 1, 20, 20, None),
-                written("translation-general", "二、通用翻译", 30, "完成汉译英与英译中。"),
-                written("translation-legal", "三、法律翻译", 30, "完成法律英语双向翻译。"),
-                written("writing", "四、作文", 20, "以“法治国家建设”为题，写一篇约 200 词作文。"),
-            ],
-        ),
-        (
-            2022,
-            ROOT / "版本二" / "西南政法大学考博英语2022.pdf",
-            [
-                written("translation", "一、翻译", 60, "按回忆版题面完成句子和段落双向翻译。"),
-                written("writing-long", "二、写作 · 大作文", 25, "陈述创新的重要性。"),
-                written("writing-short", "二、写作 · 小作文", 15, "拟写组织参加法律文书活动的通知或邀请。"),
-            ],
-        ),
-        (
-            2019,
-            ROOT / "西南政法大学大学19年题型及写作题目（题型有变化）.pdf",
-            [
-                choice("reading", "一、阅读", 1, 25, 25, None),
-                choice("cloze", "二、完形", 1, 20, 20, None),
-                written("writing", "三、写作", 25, "围绕“学术不端”写一篇不少于 150 词的议论文。"),
-                written("translation", "四、专业英语翻译", 30, "完成英译中与汉译英。"),
-            ],
-        ),
-    ]
-    for year, path, sections in memories:
-        exams.append(
-            {
-                "id": str(year),
-                "year": year,
-                "title": f"{year} 年题型回忆版",
-                "kind": "memory",
-                "source": path.name,
-                "sourcePages": "1",
-                "score": total_score(sections),
-                "sections": sections,
-                "paper": extract_single(path),
-            }
-        )
-
     exams.sort(key=lambda exam: exam["year"], reverse=True)
     payload = {
         "generatedAt": "2026-10-28",
-        "sourceNotice": "完整套卷来自 2000–2017 汇编；2019、2022、2024 为题型回忆版，缺失题干不作补写。",
+        "sourceNotice": "全部试卷仅来自指定的《西南政法大学考博英语 2000–2017 + 解析》PDF。网页已清除源文件中的网站、QQ 和电话广告。",
         "exams": exams,
     }
     target = SITE / "data" / "exams.js"

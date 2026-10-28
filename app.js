@@ -124,6 +124,104 @@
     return String(value).replace(/[&<>"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[char]));
   }
 
+  function parseInlineOptions(line) {
+    const marker = /(?:^|\s)([A-D])\s*[.．、)）]\s*/g;
+    const matches = [...line.matchAll(marker)];
+    if (!matches.length) return null;
+    const stem = line.slice(0, matches[0].index).trim();
+    const options = matches.map((match, index) => {
+      const start = match.index + match[0].length;
+      const end = index + 1 < matches.length ? matches[index + 1].index : line.length;
+      return { label: match[1], text: line.slice(start, end).trim() };
+    });
+    return { stem, options };
+  }
+
+  function renderPaperContent(text) {
+    const lines = String(text).replace(/\r/g, "").split("\n");
+    const html = [];
+    let paragraph = [];
+    let question = null;
+
+    const flushParagraph = () => {
+      if (!paragraph.length) return;
+      html.push(`<p class="paper-paragraph">${escapeHtml(paragraph.join(" "))}</p>`);
+      paragraph = [];
+    };
+    const flushQuestion = () => {
+      if (!question) return;
+      const optionHtml = question.options.length
+        ? `<div class="paper-options">${question.options.map((option) => `<div class="paper-option"><span>${option.label}</span><p>${escapeHtml(option.text)}</p></div>`).join("")}</div>`
+        : "";
+      html.push(`<section class="paper-question"><div class="question-stem"><span class="question-number">${question.number}</span><p>${escapeHtml(question.stem.join(" "))}</p></div>${optionHtml}</section>`);
+      question = null;
+    };
+    const appendOptions = (options) => {
+      options.forEach((option) => {
+        const existing = question.options.find((item) => item.label === option.label);
+        if (existing) existing.text += ` ${option.text}`;
+        else question.options.push(option);
+      });
+    };
+
+    for (const rawLine of lines) {
+      const line = rawLine.trim();
+      if (!line) {
+        flushParagraph();
+        if (question?.options.length) flushQuestion();
+        continue;
+      }
+      if (/^─+$/.test(line) || /^第\s*\d+\s*页$/.test(line)) {
+        flushParagraph();
+        continue;
+      }
+
+      const sectionLike = /^(Part|PART|Section|SECTION)\s+/i.test(line) || /^(基础英语部分|法律英语部分)/.test(line);
+      const passageLike = /^(Passage\s+|Questions?\s+\d+|Directions?:|考生注意|学科专业|考试科目)/i.test(line);
+      const documentTitle = /^西南政法大学.*(英语试题|入学考试试题)$/.test(line);
+      const questionMatch = line.match(/^(\d{1,2})\s*[.．、)）]\s*(.*)$/);
+      const optionLine = parseInlineOptions(line);
+
+      if (sectionLike || passageLike || documentTitle) {
+        flushParagraph();
+        flushQuestion();
+        const className = documentTitle ? "paper-doc-title" : sectionLike ? "paper-section-heading" : "paper-passage-label";
+        html.push(`<div class="${className}">${escapeHtml(line)}</div>`);
+        continue;
+      }
+
+      if (questionMatch) {
+        flushParagraph();
+        flushQuestion();
+        const parsed = parseInlineOptions(questionMatch[2]);
+        question = {
+          number: questionMatch[1],
+          stem: [parsed ? parsed.stem : questionMatch[2]],
+          options: [],
+        };
+        if (parsed) appendOptions(parsed.options);
+        continue;
+      }
+
+      if (optionLine && optionLine.stem === "") {
+        flushParagraph();
+        if (!question) question = { number: "", stem: [], options: [] };
+        appendOptions(optionLine.options);
+        continue;
+      }
+
+      if (question) {
+        if (question.options.length) question.options[question.options.length - 1].text += ` ${line}`;
+        else question.stem.push(line);
+      } else {
+        paragraph.push(line);
+      }
+    }
+    flushParagraph();
+    flushQuestion();
+    return html.join("");
+  }
+
   function renderExam() {
     const exam = state.exam;
     const saved = readSaved(exam.id);
@@ -139,7 +237,7 @@
     els.examMeta.textContent = `${exam.source} · 原资料第 ${exam.sourcePages} 页 · ${exam.sections.length} 个题型`;
     els.paperTitle.textContent = exam.title;
     els.paperScore.textContent = `满分 ${exam.score} 分`;
-    els.paperText.textContent = exam.paper;
+    els.paperText.innerHTML = renderPaperContent(exam.paper);
     els.sectionChips.innerHTML = exam.sections.map((section) => `<span class="section-chip">${section.title}</span>`).join("");
     els.answerSections.innerHTML = exam.sections.map((section) => section.kind === "choice" ? renderChoiceSection(section, saved) : renderWrittenSection(section, saved)).join("");
     els.resultCard.hidden = true;
@@ -259,7 +357,6 @@
   }
 
   $("#examCount").textContent = payload.exams.length;
-  $("#fullCount").textContent = payload.exams.filter((exam) => exam.kind === "full").length;
   $("#sourceNotice").textContent = payload.sourceNotice;
   els.yearSearch.addEventListener("input", () => renderExamList(els.yearSearch.value));
   els.submitButton.addEventListener("click", submitExam);
