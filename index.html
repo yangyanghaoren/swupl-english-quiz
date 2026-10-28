@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="西南政法大学考博英语历年真题在线测试，保留原题型，支持自动保存与客观题评分。">
+  <title>西政考博英语 · 历年真题在线测试</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="试卷导航">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">SW</div>
+        <div>
+          <p class="eyebrow">SWUPL · DOCTORAL ENGLISH</p>
+          <h1>历年真题测试</h1>
+        </div>
+      </div>
+      <div class="library-summary">
+        <div><strong id="examCount">—</strong><span>套资料</span></div>
+        <div><strong id="fullCount">—</strong><span>套完整卷</span></div>
+        <div><strong>本地</strong><span>自动保存</span></div>
+      </div>
+      <label class="search-box">
+        <span class="sr-only">筛选年份</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.3-4.3m2.3-5.2a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z"/></svg>
+        <input id="yearSearch" type="search" placeholder="筛选年份…" autocomplete="off">
+      </label>
+      <nav id="examList" class="exam-list"></nav>
+      <button id="aboutButton" class="sidebar-note" type="button">
+        <span>资料说明</span>
+        <small>覆盖范围、评分与去重</small>
+      </button>
+    </aside>
+
+    <main class="main-stage">
+      <header class="topbar">
+        <button id="menuButton" class="icon-button menu-button" type="button" aria-label="打开试卷列表">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+        <div class="exam-heading">
+          <div class="heading-row">
+            <h2 id="examTitle">正在载入试卷…</h2>
+            <span id="examBadge" class="badge">完整套卷</span>
+          </div>
+          <p id="examMeta">请稍候</p>
+        </div>
+        <div class="top-actions">
+          <div class="timer" aria-label="练习计时">
+            <span class="timer-dot"></span>
+            <strong id="timerValue">00:00:00</strong>
+            <button id="timerToggle" type="button">暂停</button>
+          </div>
+          <button id="resetButton" class="ghost-button" type="button">重置本卷</button>
+        </div>
+      </header>
+
+      <div class="mobile-tabs" role="tablist" aria-label="视图切换">
+        <button class="active" data-mobile-view="paper" role="tab">试卷</button>
+        <button data-mobile-view="answer" role="tab">答题卡</button>
+      </div>
+
+      <section class="workspace">
+        <article class="paper-panel" aria-label="试卷内容">
+          <div class="paper-toolbar">
+            <div id="sectionChips" class="section-chips" aria-label="题型"></div>
+            <button id="fontButton" class="text-button" type="button">字号 A+</button>
+          </div>
+          <div class="paper-sheet">
+            <div class="paper-masthead">
+              <p>西南政法大学</p>
+              <h3 id="paperTitle">博士研究生入学考试英语试题</h3>
+              <div class="rule"></div>
+              <div class="paper-facts">
+                <span id="paperScore">满分 100 分</span>
+                <span>练习模式</span>
+                <span>答案自动保存</span>
+              </div>
+            </div>
+            <pre id="paperText" class="paper-text"></pre>
+          </div>
+        </article>
+
+        <aside class="answer-panel" aria-label="电子答题卡">
+          <div class="answer-header">
+            <div>
+              <p class="eyebrow">ANSWER SHEET</p>
+              <h3>电子答题卡</h3>
+            </div>
+            <div id="progressRing" class="progress-ring" style="--progress:0">
+              <span id="progressValue">0%</span>
+            </div>
+          </div>
+          <p id="saveStatus" class="save-status"><span></span>尚未作答</p>
+          <div id="answerSections" class="answer-sections"></div>
+          <div id="resultCard" class="result-card" hidden></div>
+          <div class="submit-bar">
+            <button id="submitButton" class="primary-button" type="button">交卷并查看结果</button>
+            <p>只自动评阅有标准答案的客观题</p>
+          </div>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="aboutDialog" class="about-dialog">
+    <button id="closeAbout" class="dialog-close" type="button" aria-label="关闭">×</button>
+    <p class="eyebrow">ABOUT THIS LIBRARY</p>
+    <h2>资料与评分说明</h2>
+    <div class="dialog-grid">
+      <section><strong>14</strong><h3>套完整题面</h3><p>2000–2017 汇编中可完整提取的年份，保留原题面顺序。</p></section>
+      <section><strong>3</strong><h3>套回忆版</h3><p>2019、2022、2024 仅按原资料呈现，不补写缺失题干。</p></section>
+      <section><strong>10</strong><h3>组重复已清理</h3><p>按 SHA-256 校验，只移除了逐字节相同的“(1)”副本。</p></section>
+    </div>
+    <p id="sourceNotice" class="source-notice"></p>
+    <p class="dialog-footnote">本工具用于个人备考练习。主观题不会自动评分；没有答案的年份仍可作答和保存。</p>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="mobileBackdrop" class="mobile-backdrop"></div>
+
+  <script src="data/exams.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

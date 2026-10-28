@@ -1,0 +1,6 @@
+.DS_Store
+Thumbs.db
+*.pdf
+*.rar
+node_modules/
+.openai/
